@@ -1,13 +1,12 @@
 import click
 from risker import app
-from risker import db
+from risker import db, db_url
 from risker.models import RiskType, Field, FieldType, EnumOption
 from flask_migrate import upgrade
+from sqlalchemy_utils import database_exists, create_database, drop_database
 
 
-@app.cli.command()
 def populatedb():
-    """Populate the database with test data."""
     click.echo('Initializing db')
 
     field_type_text = FieldType(name="text")
@@ -71,8 +70,50 @@ def populatedb():
     db.session.commit()
 
 
-@app.cli.command()
 def createdb():
-    """Initialize the database to the latest migration version."""
+    """Create the database and initialize it to the latest migration version."""
+    if not database_exists(db_url):
+        click.echo("Creating database instance")
+        create_database(db_url)
+
+    click.echo("Upgrading to latest migration")
     upgrade()
     click.echo("Database structure created")
+
+
+def dropdb():
+    if database_exists(db_url):
+        click.echo("Dropping database instance.")
+        drop_database(db_url)
+    else:
+        click.echo("No database instance to drop.")
+
+
+def reloaddb():
+    dropdb()
+    createdb()
+    populatedb()
+
+
+@app.cli.command()
+def populatedb_command():
+    """Populate the database with test data."""
+    populatedb()
+
+
+@app.cli.command('createdb')
+def createdb_command():
+    """Create the database and initialize it to the latest migration version."""
+    createdb()
+
+
+@app.cli.command('dropdb')
+def dropdb_command():
+    """Drop the database instance."""
+    dropdb()
+
+
+@app.cli.command('reloaddb')
+def reloaddb_command():
+    """Reloads the database by dropping, creating and populating it again."""
+    reloaddb()

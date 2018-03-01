@@ -1,7 +1,8 @@
 # TODO
 
-* Implement tests
-
+* DONE Implement tests
+* DONE command to drop database
+* DONE command to create database
 * DONE entity relationship diagram
 * DONE command to populate DB with fixtures
 * DONE query for a list of risk types 
