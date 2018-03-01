@@ -11,8 +11,8 @@ marshmallow==3.0.0b7
 mysqlclient==1.3.12
 python-dateutil==2.6.1
 python-editor==1.0.3
-## !! Could not determine repository location
-risker==0.0.0
+-e git+https://github.com/deathwebo/britecore-backend.git@3eaab52e529e3bce9704fc5b8b205ced6985259d#egg=risker
 six==1.11.0
 SQLAlchemy==1.2.4
+SQLAlchemy-Utils==0.33.0
 Werkzeug==0.14.1
